@@ -26,7 +26,8 @@
 
         <!-- Submit & Next -->
         <button id="submitBtn">Submit</button>
-        <button id="nextBtn" style="display:none; margin-top:10px;">Next</button>
+        <button id="nextBtn" style="margin-top:10px;">Next</button>
+        <button id="quitBtn" style="margin-top:10px;" (click)="quitGame()">Quit Game</button>
 
         <!-- Result Message -->
         <p id="message"></p>
@@ -34,7 +35,6 @@
         <!-- Score -->
         <div id="scoreContainer" style="display:none; margin-top:15px; font-weight:bold;"></div>
     </div>
-
     <script src="script.js"></script>
 </body>
 
