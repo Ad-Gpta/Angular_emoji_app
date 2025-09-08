@@ -1,1 +1,41 @@
-<p>game works!</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Movie</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Guess the movie</h1>
+
+        <!-- Emojis -->
+        <div class="emoji-row" id="emojiRow">🕷️ 🧑</div>
+
+        <!-- Timer & Hint -->
+        <div class="info">
+            <span id="timer">00:30</span>
+            <span id="hint">Hint: live action</span>
+        </div>
+
+        <!-- Input -->
+        <input type="text" id="answer" placeholder="Answer" />
+
+        <!-- Submit & Next -->
+        <button id="submitBtn">Submit</button>
+        <button id="nextBtn" style="display:none; margin-top:10px;">Next</button>
+
+        <!-- Result Message -->
+        <p id="message"></p>
+
+        <!-- Score -->
+        <div id="scoreContainer" style="display:none; margin-top:15px; font-weight:bold;"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
