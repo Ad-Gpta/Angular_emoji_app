@@ -38,3 +38,17 @@
      font-size: 28px;
      margin-bottom: 20px;
  }
+
+ button {
+     background-color: #007bff;
+     /* Blue button */
+     color: white;
+     padding: 12px 25px;
+     border: none;
+     border-radius: 8px;
+     cursor: pointer;
+     font-size: 1.1em;
+     font-weight: bold;
+     transition: background-color 0.3s ease, transform 0.2s ease;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ }
