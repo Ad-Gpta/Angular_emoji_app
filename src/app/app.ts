@@ -11,14 +11,9 @@ import { ScorePage } from "./score-page/score-page";
 export class App {
   protected readonly title = signal('emoji_app');
 
-  //inject router
-  // router: Router = inject(Router);
-
-
   startGame() {
     // Logic to start the game
     console.log('Game started!');
     alert('Game started!');
-    // this.router.navigate(['/game']);
   }
 }
