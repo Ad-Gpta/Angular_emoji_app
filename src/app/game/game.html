@@ -1,41 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guess the Movie</title>
-    <link rel="stylesheet" href="game.css">
-</head>
-
-<body>
-    <div class="game-container">
-        <h1>Guess the movie</h1>
-
-        <!-- Emojis -->
-        <div class="emoji-row" id="emojiRow">🕷️ 🧑</div>
-
-        <!-- Timer & Hint -->
-        <div class="info">
-            <span id="timer">00:30</span>
-            <span id="hint">Hint: live action</span>
-        </div>
-
-        <!-- Input -->
-        <input type="text" id="answer" placeholder="Answer" />
-
-        <!-- Submit & Next -->
-        <button id="submitBtn">Submit</button>
-        <button id="nextBtn" style="display:none; margin-top:10px;">Next</button>
-
-        <!-- Result Message -->
-        <p id="message"></p>
-
-        <!-- Score -->
-        <div id="scoreContainer" style="display:none; margin-top:15px; font-weight:bold;"></div>
+<!-- Use Angular control-flow syntax (@if / @else / @for) (Angular v17+ / v20) -->
+@if (!gameOver) {
+<div class="game-container mat-elevation-z4">
+    <!-- Timer -->
+    <div class="timer">
+        <mat-icon>schedule</mat-icon>
+        <span>{{ timeLeft | number: '2.0' }}</span>
     </div>
 
-    <script src="script.js"></script>
-</body>
+    <!-- Progress -->
+    <p class="progress">Question {{ current + 1 }} / {{ totalQuestions }}</p>
 
-</html>
+    <h2>GUESS THE MOVIE</h2>
+
+    <!-- Emojis with @for -->
+    <div class="emoji-row">
+        @for (e of currentMovie.emoji; track e) {
+        <span class="emoji">{{ e }}</span>
+        }
+    </div>
+
+    <p class="hint">Hint: {{ currentMovie.hint }}</p>
+
+    <mat-form-field class="answer-field" appearance="outline">
+        <input matInput [(ngModel)]="userAnswer" placeholder="Enter your answer" [disabled]="showNext" />
+    </mat-form-field>
+
+    <div class="button-row">
+        <button mat-raised-button color="primary" (click)="submitAnswer()" [disabled]="showNext">
+            SUBMIT
+        </button>
+
+        <button mat-raised-button color="accent" (click)="nextQuestion()" [disabled]="!showNext">
+            NEXT
+        </button>
+    </div>
+
+    <p [style.color]="messageColor">{{ message }}</p>
+</div>
+} @else {
+<div class="game-container mat-elevation-z4">
+    <h2>🎉 Game Over 🎉</h2>
+    <p>Your Final Score: <b>{{ score }} / {{ totalQuestions }}</b></p>
+    <button mat-raised-button color="primary" (click)="restartGame()">
+        Play Again
+    </button>
+</div>
+}
