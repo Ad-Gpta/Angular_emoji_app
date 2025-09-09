@@ -41,6 +41,7 @@
 <div class="game-container mat-elevation-z4">
     <h2>🎉 Game Over 🎉</h2>
     <p>Your Final Score: <b>{{ score }} / {{ totalQuestions }}</b></p>
+    <button (click)="endGame()">Go to Leaderboard</button>
     <button mat-raised-button color="primary" (click)="restartGame()">
         Play Again
     </button>

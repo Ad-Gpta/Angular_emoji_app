@@ -24,7 +24,7 @@ export class ScorePage {
   }
 
   getLeaderboard() {
-    this.gameService.getEmojis().subscribe({
+    this.gameService.getBestScores().subscribe({
       next: (res) => {
         console.log(res);
         this.dataSource = new MatTableDataSource(res);

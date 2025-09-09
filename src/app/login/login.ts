@@ -29,6 +29,7 @@ export class Login {
         },
         error: (err) => {
           console.error(err);
+          console.log("failed to create user")
         }
       });
 

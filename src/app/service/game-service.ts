@@ -13,10 +13,12 @@ export class GameService {
   username: string = '';
 
   private _usernameSource = new BehaviorSubject<string>('');
+  private _scoreSource = new BehaviorSubject<number>(0);
 
   // 2. Expose a public Observable that other components can subscribe to.
   // The '$' suffix is a convention for Observables.
   username$ = this._usernameSource.asObservable();
+  score$ = this._scoreSource.asObservable();
 
   constructor(private _http: HttpClient) { }
 
@@ -24,6 +26,11 @@ export class GameService {
   setUsername(username: string) {
     console.log('GameService: Setting username to', username);
     this._usernameSource.next(username); // Emit the new username
+  }
+
+  setUserScore(score: number) {
+    console.log('GameService: Setting user score to', score);
+    this._scoreSource.next(score); // Emit the new username
   }
 
   // send username and score to database
