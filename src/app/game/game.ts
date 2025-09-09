@@ -120,6 +120,10 @@ export class Game implements OnInit {
 
     this.gameService.setUserScore(this.score);
 
+    console.log('Final Score:', this.score);
+
+
+
     this.router.navigate(['/score']);
   }
 
