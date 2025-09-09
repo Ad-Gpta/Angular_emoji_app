@@ -1,27 +1,12 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>
-        Start Game
-    </title>
-</head>
-
 <body>
     <div class="login-container">
         <h1> Enter player name:</h1>
-        <form class="input-username-form" appearance="outline">
+        <form class="input-username-form" (ngSubmit)="startGame()" [formGroup]="form">
             <mat-form-field class="input-username" appearance="outline">
                 <mat-label>Username</mat-label>
-                <input matInput placeholder="Player1" [(ngModel)]="username" required name="username">
+                <input matInput placeholder="Player1" required formControlName="username">
             </mat-form-field>
+            <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Start Game</button>
         </form>
-        <!--<input type="text" id="playerName" name="playerName" placeholder="Player Name">-->
-        <button (click)="startGame()">Start Game</button>
-        <!--<a routerLink='/game'>Go to Game</a>-->
     </div>
-
 </body>
-<!--<app-score-page></app-score-page>-->
-
-</html>
