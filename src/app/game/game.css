@@ -1,65 +1,58 @@
-body {
-    font-family: Arial, sans-serif;
+.game-container {
+    width: 340px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    background: #fff;
+}
+
+.timer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    background: #b9ccdf;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.game-container {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 320px;
+.timer mat-icon {
+    margin-right: 5px;
+    color: #fbc02d;
 }
 
-h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
+.progress {
+    font-size: 0.9rem;
+    color: #888;
 }
 
 .emoji-row {
-    font-size: 40px;
-    margin-bottom: 20px;
+    font-size: 2rem;
+    margin: 15px 0;
 }
 
-.info {
+.hint {
+    font-style: italic;
+    color: #666;
+    margin: 5px 0 15px 0;
+}
+
+.answer-field {
+    width: 100%;
+}
+
+.button-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-
-#answer {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    font-size: 16px;
+    margin-top: 15px;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: #374151;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
+    border-radius: 12px;
 }
 
-button:hover {
-    background: #111827;
-}
-
-#message {
-    margin-top: 15px;
-    font-size: 16px;
+p {
+    margin-top: 10px;
     font-weight: bold;
 }
