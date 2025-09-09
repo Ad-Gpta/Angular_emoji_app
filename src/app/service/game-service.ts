@@ -1,20 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
-  userUrl: string = 'http://localhost:8080';
-  emojiUrl: string = 'http://localhost:8000';
+  userUrl: string = 'http://localhost:8080'; //user and score
+  emojiUrl: string = 'http://localhost:8000'; //emojis
+
+
+  username: string = '';
+
+  private _usernameSource = new BehaviorSubject<string>('');
+
+  // 2. Expose a public Observable that other components can subscribe to.
+  // The '$' suffix is a convention for Observables.
+  username$ = this._usernameSource.asObservable();
 
   constructor(private _http: HttpClient) { }
 
+  // method to set username
+  setUsername(username: string) {
+    console.log('GameService: Setting username to', username);
+    this._usernameSource.next(username); // Emit the new username
+  }
+
   // send username and score to database
-  addUserAndScore(data: any): Observable<any> {
+  addUser(data: any): Observable<any> {
     console.log(data);
-    return this._http.post(this.userUrl, data);
+    return this._http.post(this.userUrl + "/users", data);
+  }
+
+  addScore(data: any): Observable<any> {
+    console.log(data);
+    return this._http.post(this.userUrl + '/scores', data);
+  }
+
+  getUser(): Observable<any> {
+    console.log("Getting username");
+    return this._http.get(this.userUrl + "/users");
   }
 
   // get emojis from json server
@@ -24,6 +49,6 @@ export class GameService {
 
   // get best scores from databases
   getBestScores(): Observable<any> {
-    return this._http.get(this.emojiUrl + '/top-scores');
+    return this._http.get(this.userUrl + '/scores/leaderboard');
   }
 }

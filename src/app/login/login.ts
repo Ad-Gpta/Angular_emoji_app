@@ -1,30 +1,42 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
+import { GameService } from '../service/game-service';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule],
+  imports: [ReactiveFormsModule, FormsModule, MatFormFieldModule, MatInputModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login {
   router: Router = inject(Router);
+  gameService = inject(GameService);
 
-  username = '';
-
-  // get username from input field and start the game
-
+  form: FormGroup = new FormGroup({
+    username: new FormControl('', [Validators.required, Validators.minLength(3)])
+  });
 
   startGame() {
-    // get username from input field and trim whitespace  
 
-    this.username = this.username.trim();
-    // Logic to start the game
-    console.log('Game started! for username: ' + this.username);
-    // alert('Game started!');
+    if (this.form.valid) {
+      this.gameService.addUser(this.form.value).subscribe({
+        next: (res) => {
+          alert('User Added')
+          console.log(res);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+
+      // add username to game service
+      const username = this.form.value.username?.trim();
+      this.gameService.setUsername(username);
+    }
+    console.log('Game started!');
     this.router.navigate(['/game']);
     //this.router.navigateByUrl('/game');
   }

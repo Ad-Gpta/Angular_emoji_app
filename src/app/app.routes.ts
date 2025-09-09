@@ -4,7 +4,7 @@ import { ScorePage } from "./score-page/score-page";
 import { Game } from "./game/game";
 import { Login } from './login/login';
 
-export const routes: Routes = [
+export const routeConfig: Routes = [
     {
         path: '',
         component: Login,
