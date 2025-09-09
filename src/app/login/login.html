@@ -4,7 +4,7 @@
         <form class="input-username-form" (ngSubmit)="startGame()" [formGroup]="form">
             <mat-form-field class="input-username" appearance="outline">
                 <mat-label>Username</mat-label>
-                <input matInput placeholder="Player1" required formControlName="username">
+                <input matInput placeholder="Player1" required formControlName="name">
             </mat-form-field>
             <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Start Game</button>
         </form>

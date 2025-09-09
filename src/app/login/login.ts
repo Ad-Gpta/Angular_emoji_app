@@ -16,7 +16,7 @@ export class Login {
   gameService = inject(GameService);
 
   form: FormGroup = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.minLength(3)])
+    name: new FormControl('', [Validators.required, Validators.minLength(3)])
   });
 
   startGame() {
@@ -24,11 +24,12 @@ export class Login {
     if (this.form.valid) {
       this.gameService.addUser(this.form.value).subscribe({
         next: (res) => {
-          alert('User Added')
+          // alert('User Added')
           console.log(res);
         },
         error: (err) => {
           console.error(err);
+          console.log("failed to create user")
         }
       });
 

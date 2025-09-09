@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { GameService } from '../service/game-service';
 
 
 interface Movie {
@@ -25,6 +27,8 @@ interface Movie {
 })
 
 export class Game implements OnInit {
+  gameService = inject(GameService);
+
   movies = [
     { emoji: ["🕷️", "🧑"], answer: "spiderman", hint: "live action" },
     { emoji: ["🦁", "👑"], answer: "lion king", hint: "animation" },
@@ -51,6 +55,7 @@ export class Game implements OnInit {
 
   score: number = 0;
   gameOver: boolean = false;
+  router: Router = inject(Router);
 
   ngOnInit(): void {
     // safety: ensure we don't try to run more questions than we have defined
@@ -111,6 +116,15 @@ export class Game implements OnInit {
   endGame() {
     this.gameOver = true;
     clearInterval(this.timer);
+    // send score to score page
+
+    this.gameService.setUserScore(this.score);
+
+    console.log('Final Score:', this.score);
+
+
+
+    this.router.navigate(['/score']);
   }
 
   restartGame() {
