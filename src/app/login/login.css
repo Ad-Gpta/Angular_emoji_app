@@ -73,3 +73,13 @@ button:active {
     /* Reset lift effect */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.input-username-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.input-username {
+    width: 100%;
+}

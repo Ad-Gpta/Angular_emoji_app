@@ -10,7 +10,13 @@
 <body>
     <div class="login-container">
         <h1> Enter player name:</h1>
-        <input type="text" id="playerName" name="playerName" placeholder="Player Name">
+        <form class="input-username-form" appearance="outline">
+            <mat-form-field class="input-username" appearance="outline">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Player1" [(ngModel)]="username" required name="username">
+            </mat-form-field>
+        </form>
+        <!--<input type="text" id="playerName" name="playerName" placeholder="Player Name">-->
         <button (click)="startGame()">Start Game</button>
         <!--<a routerLink='/game'>Go to Game</a>-->
     </div>
