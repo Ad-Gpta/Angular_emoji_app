@@ -6,35 +6,37 @@
         <mat-icon>schedule</mat-icon>
         <span>{{ timeLeft | number: '2.0' }}</span>
     </div>
-
+ 
     <!-- Progress -->
     <p class="progress">Question {{ current + 1 }} / {{ totalQuestions }}</p>
-
+ 
     <h2>GUESS THE MOVIE</h2>
-
+ 
     <!-- Emojis with @for -->
     <div class="emoji-row">
-        @for (e of currentMovie.emoji; track e) {
-        <span class="emoji">{{ e }}</span>
-        }
+       
+@for (e of currentEmojis; track e) {
+  <span class="emoji">{{ e }}</span>
+}
+ 
     </div>
-
+ 
     <p class="hint">Hint: {{ currentMovie.hint }}</p>
-
+ 
     <mat-form-field class="answer-field" appearance="outline">
         <input matInput [(ngModel)]="userAnswer" placeholder="Enter your answer" [disabled]="showNext" />
     </mat-form-field>
-
+ 
     <div class="button-row">
         <button mat-raised-button color="primary" (click)="submitAnswer()" [disabled]="showNext">
             SUBMIT
         </button>
-
+ 
         <button mat-raised-button color="accent" (click)="nextQuestion()" [disabled]="!showNext">
             NEXT
         </button>
     </div>
-
+ 
     <p [style.color]="messageColor">{{ message }}</p>
 </div>
 } @else {

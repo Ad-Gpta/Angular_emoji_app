@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,123 +9,113 @@ import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { GameService } from '../service/game-service';
-
-
+ 
+ 
 interface Movie {
-  emoji: string;
-  answer: string;
+  unicode_seq: string;
+  movie_name: string;
   hint: string;
 }
-
+ 
+ 
 @Component({
   selector: 'app-game',
-  imports: [MatCardModule, MatFormFieldModule, MatIcon, CommonModule,
+  imports: [MatCardModule, MatFormFieldModule, MatIcon, CommonModule, FormsModule,
     MatButtonModule,
     MatInputModule,
     FormsModule],
   templateUrl: './game.html',
   styleUrls: ['./game.css']
 })
-
+ 
 export class Game implements OnInit {
-  gameService = inject(GameService);
-
-  movies = [
-    { emoji: ["🕷️", "🧑"], answer: "spiderman", hint: "live action" },
-    { emoji: ["🦁", "👑"], answer: "lion king", hint: "animation" },
-    { emoji: ["🧑‍🚀", "🌑"], answer: "interstellar", hint: "space" },
-    { emoji: ["🧊", "🚢"], answer: "titanic", hint: "romance" },
-    { emoji: ["🦖", "🌴"], answer: "jurassic park", hint: "dinosaurs" },
-    { emoji: ["🧙", "⚡"], answer: "harry potter", hint: "magic" },
-    { emoji: ["🦇", "🌃"], answer: "batman", hint: "superhero" },
-    { emoji: ["👻", "🏠"], answer: "ghostbusters", hint: "comedy" },
-    { emoji: ["🥊", "🇺🇸"], answer: "rocky", hint: "boxing" },
-    { emoji: ["👩‍🚀", "🚀"], answer: "gravity", hint: "space survival" }
-  ];
-
-  totalQuestions = 10;
-  current = 0;
-  currentMovie = this.movies[0];
+  movies: Movie[] = [];
+  currentMovie!: Movie;
+  current: number = 0;
+  totalQuestions: number = 5;
   userAnswer: string = '';
   message: string = '';
   messageColor: string = 'black';
-
-  timeLeft: number = 30;
-  timer: any;
   showNext: boolean = false;
-
   score: number = 0;
   gameOver: boolean = false;
-  router: Router = inject(Router);
-
-  // Store the current user ID
-  currentUserID: number | null = null;
-
+  timeLeft: number = 30;
+  currentEmojis: string[] = [];
+ 
+  timerInterval: any;
+  gameService = inject(GameService);
+ 
+  constructor(private http: HttpClient, private router: Router) {}
+ 
   ngOnInit(): void {
-    // safety: ensure we don't try to run more questions than we have defined
-    if (this.movies.length < this.totalQuestions) {
-      console.warn(
-        `movies.length (${this.movies.length}) < totalQuestions (${this.totalQuestions}). Adjusting totalQuestions.`
-      );
-      this.totalQuestions = this.movies.length;
-    }
+    this.fetchMovies();
+  }
+ 
+  fetchMovies() {
+    this.http.get<Movie[]>('http://127.0.0.1:8000')
+      .subscribe(data => {
+        // this.movies = data;
+        this.movies = this.shuffleArray(data);
+        this.loadQuestion();
+      });
+  }
+ 
+  loadQuestion(): void {
     this.currentMovie = this.movies[this.current];
-    this.startTimer();
+    this.currentEmojis = this.convertUnicodeToEmojis(this.currentMovie.unicode_seq);
+    this.resetTimer();
+    this.userAnswer = '';
+    this.message = '';
+    this.messageColor = 'black';
+    this.showNext = false;
   }
-
-  startTimer() {
-    this.timeLeft = 30;
-    clearInterval(this.timer);
-    this.timer = setInterval(() => {
-      if (this.timeLeft > 0) {
-        this.timeLeft--;
-      } else {
-        clearInterval(this.timer);
-        this.message = "⏰ Time's up!";
-        this.messageColor = "red";
-        this.showNext = true;
-      }
-    }, 1000);
+ 
+  convertUnicodeToEmojis(seq: string): string[] {
+    return seq.split(' ').map(code => {
+      const hex = code.replace('U+', '');
+      return String.fromCodePoint(parseInt(hex, 16));
+    });
   }
-
-  submitAnswer() {
-    if (
-      this.userAnswer.trim().toLowerCase() ===
-      this.currentMovie.answer.toLowerCase()
-    ) {
-      this.message = '✅ Correct!';
+ 
+  submitAnswer(): void {
+    if (this.userAnswer.trim().toLowerCase() === this.currentMovie.movie_name.toLowerCase()) {
+      this.message = '✅ Correct answer!';
       this.messageColor = 'green';
       this.score++;
     } else {
-      this.message = '❌ Wrong! Correct answer: ' + this.currentMovie.answer;
+      this.message = '❌ Wrong! Correct Answer ' + this.currentMovie.movie_name;
       this.messageColor = 'red';
     }
     this.showNext = true;
-    clearInterval(this.timer);
+    clearInterval(this.timerInterval);
   }
-
-  nextQuestion() {
-    if (this.current + 1 < this.totalQuestions) {
-      this.current++;
-      this.currentMovie = this.movies[this.current];
-      this.userAnswer = '';
-      this.message = '';
-      this.showNext = false;
-      this.startTimer();
+ 
+  nextQuestion(): void {
+    this.current++;
+    if (this.current < this.totalQuestions) {
+      this.loadQuestion();
     } else {
+      this.gameOver = true;
       this.endGame();
     }
   }
-
-  endGame() {
+ 
+  restartGame(): void {
+    this.current = 0;
+    this.score = 0;
+    this.gameOver = false;
+    this.fetchMovies();
+  }
+ 
+  public endGame() {
+    // console.log('Game ended. Final score:', this.score);
     this.gameOver = true;
-    clearInterval(this.timer);
-    // send score to score page
+    clearInterval(this.timerInterval);
 
     this.gameService.setUserScore(this.score);
-
+ 
     console.log('Final Score:', this.score);
-
+ 
     this.gameService.addScore().subscribe({
       next: (res) => {
         console.log('Score submitted:', res);
@@ -133,49 +124,25 @@ export class Game implements OnInit {
         console.error('Error submitting score:', err);
       }
     });
-
-
-    //console.log(this.gameService.userID$);
-    //const userID = this.gameService.userID$;
-    //const score = this.score;
-
-    /*
-    this.gameService.getUserID().subscribe(config => {
-        console.log("Game: Received user ID:", config);
-        this.currentUserID = config.userID;
-      })
-        */
-
-      /*
-
-    this.currentUserID = this.gameService.getCurrentUserID();
-
-    console.log("Game: Submitting score for userID:", this.currentUserID, "with score:", this.score);
-
-    this.gameService.addScore({
-      userID: this.currentUserID,
-      scoreValue: this.score
-    }).subscribe({
-      next: (res) => {
-        console.log('Score submitted:', res);
-      }, 
-      error: (err) => {
-        console.error('Error submitting score:', err);
-      }
-    });
-    */
-
+ 
     this.router.navigate(['/score']);
   }
-
-  restartGame() {
-    this.current = 0;
-    this.score = 0;
-    this.gameOver = false;
-    this.currentMovie = this.movies[this.current];
-    this.userAnswer = '';
-    this.message = '';
-    this.showNext = false;
-    this.startTimer();
+ 
+  resetTimer(): void {
+    this.timeLeft = 30;
+    clearInterval(this.timerInterval);
+    this.timerInterval = setInterval(() => {
+      this.timeLeft--;
+      if (this.timeLeft <= 0) {
+        this.message = '⏰ Time up! answer was ' + this.currentMovie.movie_name;
+        this.messageColor = 'orange';
+        this.showNext = true;
+        clearInterval(this.timerInterval);
+      }
+    }, 1000);
+  }
+ 
+  shuffleArray(array: Movie[]): Movie[] {
+    return array.sort(() => Math.random() - 0.5);
   }
 }
