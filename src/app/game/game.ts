@@ -57,6 +57,9 @@ export class Game implements OnInit {
   gameOver: boolean = false;
   router: Router = inject(Router);
 
+  // Store the current user ID
+  currentUserID: number | null = null;
+
   ngOnInit(): void {
     // safety: ensure we don't try to run more questions than we have defined
     if (this.movies.length < this.totalQuestions) {
@@ -122,9 +125,36 @@ export class Game implements OnInit {
 
     console.log('Final Score:', this.score);
 
+    this.gameService.addScore().subscribe({
+      next: (res) => {
+        console.log('Score submitted:', res);
+      },
+      error: (err) => {
+        console.error('Error submitting score:', err);
+      }
+    });
+
+
+    //console.log(this.gameService.userID$);
+    //const userID = this.gameService.userID$;
+    //const score = this.score;
+
+    /*
+    this.gameService.getUserID().subscribe(config => {
+        console.log("Game: Received user ID:", config);
+        this.currentUserID = config.userID;
+      })
+        */
+
+      /*
+
+    this.currentUserID = this.gameService.getCurrentUserID();
+
+    console.log("Game: Submitting score for userID:", this.currentUserID, "with score:", this.score);
+
     this.gameService.addScore({
-      id: this.gameService.id$,
-      score: this.score
+      userID: this.currentUserID,
+      scoreValue: this.score
     }).subscribe({
       next: (res) => {
         console.log('Score submitted:', res);
@@ -133,6 +163,7 @@ export class Game implements OnInit {
         console.error('Error submitting score:', err);
       }
     });
+    */
 
     this.router.navigate(['/score']);
   }
