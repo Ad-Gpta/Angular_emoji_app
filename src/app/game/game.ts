@@ -122,7 +122,17 @@ export class Game implements OnInit {
 
     console.log('Final Score:', this.score);
 
-
+    this.gameService.addScore({
+      id: this.gameService.id$,
+      score: this.score
+    }).subscribe({
+      next: (res) => {
+        console.log('Score submitted:', res);
+      }, 
+      error: (err) => {
+        console.error('Error submitting score:', err);
+      }
+    });
 
     this.router.navigate(['/score']);
   }

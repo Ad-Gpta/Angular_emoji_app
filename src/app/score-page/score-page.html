@@ -13,7 +13,8 @@
 
     <div class="user-score-container">
         <!--<img src="imgs/user_icon2.png" alt="user icon" height="100" width="100">-->
-        <p>User: {{ gameService.username$ | async }} <br> Score: {{ gameService.score$ | async }}</p>
+        <p>User: {{  gameService.username$| async }} <br> Score: {{ gameService.score$ | async }}</p>
+        <!--{{  gameService.username$| async }}     {{ gameService.score$ | async }}  -->
     </div>
     <br>
     <div class="leaderboard-container">
