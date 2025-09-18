@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { GameService } from '../service/game-service';
+import { config } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,11 @@ export class Login {
       this.gameService.addUser(this.form.value).subscribe({
         next: (res) => {
           // alert('User Added')
+          const userID = res.id;
+          const username = res.name;
+          this.gameService.setUserID(userID);
+          this.gameService.setUsername(username);
+
           console.log(res);
         },
         error: (err) => {
@@ -33,12 +39,37 @@ export class Login {
         }
       });
 
+      /*
       // add username to game service
-      const username = this.form.value.username?.trim();
+      const username = this.form.value.name?.trim();
       this.gameService.setUsername(username);
+      console.log('Username set to:', username);
+      */
+
+      /*
+      this.gameService.getUserID().subscribe(
+        (res) => {
+          console.log("Received user ID:", res);
+          const userID = res.id;
+          this.gameService.setUserID(userID);
+        },
+        (err) => {
+          console.error("Error fetching user ID:", err);
+        }
+      );
+      */
+ 
+      /*
+      this.gameService.getUserID().subscribe(config => {
+        console.log("Received user ID:", config);
+        const userID = config;
+        this.gameService.setUserID(userID);
+      })
+        */
+
+      console.log('Game started!');
+      this.router.navigate(['/game']);
+      //this.router.navigateByUrl('/game');
     }
-    console.log('Game started!');
-    this.router.navigate(['/game']);
-    //this.router.navigateByUrl('/game');
   }
 }
