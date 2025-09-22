@@ -88,3 +88,7 @@ p[style] {
 .game-container button {
   margin: 10px;
 }
+
+body {
+  background: linear-gradient(to right, #667eea, #764ba2);
+}

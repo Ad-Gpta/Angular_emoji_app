@@ -6,7 +6,7 @@ body {
     text-align: center;
     height: 100vh;
     margin: 0;
-    background: #f8f9fa;
+    background: linear-gradient(to right, #667eea, #764ba2);
 }
 
 .login-container {
